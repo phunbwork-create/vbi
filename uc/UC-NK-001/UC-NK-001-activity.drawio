@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net" modified="2026-08-02T10:14:00.000Z" agent="uc-agent-pack" version="24.0.0">
+  <diagram id="uc-nk-001-activity" name="UC-NK-001 Activity Diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Pool + 2 swimlane ngang -->
+        <mxCell id="pool" value="UC-NK-001 — Quy trình Quản lý Nhập kho Ô mai Hồng Lam" style="swimlane;html=1;horizontal=0;childLayout=stackLayout;resizeParent=1;startSize=30;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1320" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-actor" value="Actor (Thủ kho / QA / Quản lý)" style="swimlane;html=1;horizontal=0;startSize=30;" vertex="1" parent="pool">
+          <mxGeometry x="30" y="0" width="1290" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-system" value="Hệ thống WMS / ERP" style="swimlane;html=1;horizontal=0;startSize=30;" vertex="1" parent="pool">
+          <mxGeometry x="30" y="360" width="1290" height="360" as="geometry" />
+        </mxCell>
+
+        <!-- Start Node -->
+        <mxCell id="start" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="lane-actor">
+          <mxGeometry x="40" y="150" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- M1 -->
+        <mxCell id="m1" value="M1: Chọn Loại phiếu &amp; Mã PO/Đơn hàng" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="lane-actor">
+          <mxGeometry x="110" y="135" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- M2 -->
+        <mxCell id="m2" value="M2: Kiểm tra PO &amp; Trạng thái QC" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-system">
+          <mxGeometry x="110" y="135" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- D1: Decision QC Status -->
+        <mxCell id="d1" value="Kiểm định QC?" style="rhombus;html=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-system">
+          <mxGeometry x="310" y="125" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- E2: Partial QC -->
+        <mxCell id="e2" value="E2: Tách 2 phiếu (Phiếu A: Đạt / Phiếu B: Lỗi cất Khu Biệt Trữ)" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="lane-system">
+          <mxGeometry x="300" y="250" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- M3 -->
+        <mxCell id="m3" value="M3: Quét mã QR/Barcode lô hàng (Tự động lây Lot/EXP)" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="lane-actor">
+          <mxGeometry x="470" y="135" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- M4 -->
+        <mxCell id="m4" value="M4: Nhập số lượng thực tế kiểm đếm" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="lane-actor">
+          <mxGeometry x="670" y="135" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- D2: Decision Tolerance -->
+        <mxCell id="d2" value="Khớp PO / Dung sai?" style="rhombus;html=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="lane-system">
+          <mxGeometry x="680" y="125" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- E1: Over delivery -->
+        <mxCell id="e1" value="E1: Khóa phần thừa &amp; Lập BB Hàng Thừa chờ duyệt" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="lane-system">
+          <mxGeometry x="660" y="250" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- M5 -->
+        <mxCell id="m5" value="M5: Gợi ý Vị trí Bin Location (FEFO / Vùng kho)" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-system">
+          <mxGeometry x="870" y="135" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- M6 -->
+        <mxCell id="m6" value="M6: Di chuyển &amp; Quét mã Bin cất hàng (Put-away)" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="lane-actor">
+          <mxGeometry x="870" y="135" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- M7 -->
+        <mxCell id="m7" value="M7: Đính kèm ảnh &amp; Trình duyệt phiếu kho" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="lane-actor">
+          <mxGeometry x="1070" y="135" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- M8 -->
+        <mxCell id="m8" value="M8: 3-Way Matching &amp; Duyệt phiếu (APPROVED) -> Sync ERP" style="rounded=1;html=1;arcSize=30;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="lane-system">
+          <mxGeometry x="1060" y="240" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- End Node -->
+        <mxCell id="end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="lane-system">
+          <mxGeometry x="1270" y="260" width="30" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="f1" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="start" target="m1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f2" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="m1" target="m2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f3" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="m2" target="d1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f4" value="PASSED 100%" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="d1" target="m3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f5" value="Lỗi 1 phần" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="d1" target="e2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f6" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="e2" target="m3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f7" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="m3" target="m4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f8" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="m4" target="d2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f9" value="Hợp lệ / Inbound thiếu" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="d2" target="m5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f10" value="Thừa ngoài dung sai" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="d2" target="e1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f11" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="m5" target="m6"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f12" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="m6" target="m7"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f13" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="m7" target="m8"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="f14" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;" edge="1" parent="pool" source="m8" target="end"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

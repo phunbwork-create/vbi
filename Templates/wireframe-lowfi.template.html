@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCR-UC-XX-000-01 — Tên màn hình (LOW-FI WIREFRAME)</title>
+<style>
+  /* LOW-FI: chỉ thang xám, chủ đích chưa bàn thẩm mỹ */
+  :root{--ink:#333;--line:#999;--bg:#f5f5f5;--zone:#fff;}
+  *{box-sizing:border-box;font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-size:14px;}
+  .wf-meta{background:#e8e8e8;border-bottom:2px dashed var(--line);padding:8px 16px;font-size:12px;}
+  .wf-meta b{margin-right:12px;}
+  header.app{padding:12px 16px;border-bottom:1px solid var(--line);background:var(--zone);}
+  .breadcrumb{font-size:12px;color:#666;margin-bottom:4px;}
+  main{max-width:960px;margin:16px auto;padding:0 16px;}
+  .zone{border:2px dashed var(--line);background:var(--zone);padding:12px;margin-bottom:16px;position:relative;}
+  .zone > .zlabel{position:absolute;top:-10px;left:8px;background:var(--zone);padding:0 6px;font-size:11px;color:#666;text-transform:uppercase;}
+  .field{margin-bottom:10px;}
+  .field label{display:block;font-weight:600;margin-bottom:4px;}
+  .field label .req{color:#000;}
+  input,select,textarea{width:100%;padding:6px 8px;border:1px solid var(--line);background:#fafafa;}
+  .br{display:inline-block;border:1px solid var(--line);border-radius:8px;font-size:10px;padding:0 6px;margin-left:6px;color:#555;background:#eee;}
+  .btn{padding:8px 20px;border:1px solid var(--ink);background:#ddd;cursor:pointer;font-weight:600;}
+  .btn.secondary{background:#fff;font-weight:400;}
+  table.data{width:100%;border-collapse:collapse;}
+  table.data th,table.data td{border:1px solid var(--line);padding:6px 8px;text-align:left;}
+  .state{border-left:4px solid var(--line);padding:8px 12px;margin:12px 0;background:#eee;font-size:13px;}
+  .legend{font-size:12px;}
+</style>
+</head>
+<body>
+  <!-- Khối meta wireframe: xoá khi lên hi-fi -->
+  <div class="wf-meta">
+    <b>Mã:</b> SCR-UC-XX-000-01 <b>UC:</b> UC-XX-000 <b>Bước luồng:</b> M2–M3 <b>Pha:</b> LOW-FI <b>Vòng:</b> r1
+  </div>
+
+  <header class="app">
+    <div class="breadcrumb">Trang chủ / Phân hệ ... / Chức năng ...</div>
+    <h2 style="margin:0;">[Tên màn hình]</h2>
+  </header>
+
+  <main>
+    <div class="zone">
+      <span class="zlabel">Vùng: Thông tin hồ sơ</span>
+      <div class="field">
+        <label>Họ và tên <span class="req">*</span> <span class="br">BR-UC-XX-000-01</span></label>
+        <input placeholder="VD: Nguyễn Văn A (dữ liệu minh hoạ)">
+      </div>
+      <div class="field">
+        <label>Số CCCD <span class="req">*</span> <span class="br">BR-UC-XX-000-02</span></label>
+        <input placeholder="12 chữ số">
+      </div>
+    </div>
+
+    <div class="zone">
+      <span class="zlabel">Vùng: Hành động</span>
+      <button class="btn">Lưu hồ sơ</button>
+      <button class="btn secondary">Huỷ</button>
+    </div>
+
+    <!-- Trạng thái phụ: hiển thị chung trong wireframe để review -->
+    <div class="state"><b>Trạng thái LỖI VALIDATE:</b> "Số CCCD phải gồm đúng 12 chữ số." (BR-UC-XX-000-02)</div>
+    <div class="state"><b>Trạng thái RỖNG DỮ LIỆU:</b> "Chưa có hồ sơ nào. Bấm 'Thêm mới' để bắt đầu."</div>
+
+    <div class="zone legend">
+      <span class="zlabel">Chú giải control ↔ BR ↔ bước luồng</span>
+      <table class="data">
+        <tr><th>Control</th><th>BR</th><th>Bước</th><th>Ghi chú</th></tr>
+        <tr><td>Họ và tên</td><td>BR-UC-XX-000-01</td><td>M2</td><td></td></tr>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

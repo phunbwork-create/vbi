@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCR-UC-NK-001-02: Màn hình Chi tiết Kiểm đếm & Quét Cất Hàng Bin Location - WMS Ô mai Hồng Lam</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+    body { background-color: #eef0f3; color: #333; padding: 15px; }
+    .layout-wrapper { display: grid; grid-template-columns: 360px 1fr; gap: 20px; max-width: 1300px; margin: 0 auto; }
+    
+    /* Panel Trái: Giả lập Màn hình Máy cầm tay PDA Handheld của Thủ kho */
+    .pda-container { background: #1a1a1a; border-radius: 20px; padding: 15px; color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 4px solid #333; }
+    .pda-header { background: #333; padding: 10px; border-radius: 8px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .pda-screen { background: #fff; color: #222; border-radius: 8px; padding: 12px; min-height: 520px; font-size: 12px; }
+    .pda-title { font-size: 14px; font-weight: 700; border-bottom: 2px solid #222; padding-bottom: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+    
+    .barcode-input-box { background: #e8f0fe; border: 2px dashed #1a73e8; border-radius: 6px; padding: 10px; text-align: center; margin-bottom: 12px; }
+    .barcode-input-box input { width: 100%; padding: 6px; font-size: 13px; font-family: monospace; border: 1px solid #aaa; border-radius: 4px; text-align: center; margin-top: 5px; }
+    
+    .field-lock { background: #f0f0f0; border: 1px solid #ccc; padding: 6px; border-radius: 4px; font-weight: bold; color: #555; display: flex; justify-content: space-between; align-items: center; }
+    .lock-icon { font-size: 10px; background: #999; color: #fff; padding: 1px 5px; border-radius: 3px; }
+    
+    .bin-suggestion { background: #e6f4ea; border: 1px solid #ceead6; border-radius: 6px; padding: 10px; margin: 10px 0; color: #137333; }
+    .bin-code { font-size: 16px; font-weight: 800; font-family: monospace; color: #0d652d; display: block; margin-top: 3px; }
+
+    /* Panel Phải: Giao diện Máy tính Management / Kế toán / Duyệt */
+    .main-panel { background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .panel-header { display: flex; justify-content: space-between; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 15px; }
+    .panel-header h2 { font-size: 18px; font-weight: 700; }
+    
+    .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: #f9f9f9; padding: 12px; border-radius: 6px; border: 1px solid #e0e0e0; margin-bottom: 15px; font-size: 13px; }
+    .info-item label { display: block; font-size: 11px; color: #666; font-weight: bold; text-transform: uppercase; }
+    .info-item span { font-weight: 600; color: #111; }
+    
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 15px; }
+    th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: left; }
+    th { background: #eee; font-weight: 700; }
+    
+    .action-bar { display: flex; justify-content: space-between; align-items: center; background: #fafafa; padding: 12px; border: 1px solid #ddd; border-radius: 6px; }
+    .btn { padding: 8px 16px; font-size: 13px; font-weight: 700; border-radius: 4px; cursor: pointer; border: none; }
+    .btn-dark { background: #222; color: #fff; }
+    .btn-danger { background: #d93025; color: #fff; }
+    .btn-secondary { background: #fff; color: #333; border: 1px solid #ccc; }
+    .btn-success { background: #1e8e3e; color: #fff; }
+
+    .tag-qc-pass { background: #e6f4ea; color: #137333; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+    .tag-qc-fail { background: #fce8e6; color: #c5221f; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+    
+    .spec-box { margin-top: 15px; padding: 10px; background: #fff8e1; border-left: 4px solid #ffb300; font-size: 11px; color: #555; }
+  </style>
+</head>
+<body>
+
+<div class="layout-wrapper">
+
+  <!-- LEFT: PDA HANDHELD SIMULATOR -->
+  <div class="pda-container">
+    <div class="pda-header">
+      <span>PDA-04 (Kho Hoài Đức)</span>
+      <span>Wifi: 100% (Online)</span>
+    </div>
+    <div class="pda-screen">
+      <div class="pda-title">
+        <span>QUÉT CẤT HÀNG (PUT-AWAY)</span>
+        <span style="font-size:10px; background:#eee; padding:2px 4px;">BR-07 LOCK</span>
+      </div>
+
+      <!-- Quét Barcode -->
+      <div class="barcode-input-box">
+        <label for="pda-scan">SẴN SÀNG QUÉT MÃ BARCODE / QR GS1</label>
+        <input type="text" id="pda-scan" value="8936012345678" readonly>
+      </div>
+
+      <!-- Thông tin SKU -->
+      <div style="margin-bottom: 8px;">
+        <label style="font-size: 10px; color: #666;">SẢN PHẨM KHỚP PO:</label>
+        <div style="font-weight: bold; font-size: 13px;">Ô MAI SẤU XÀO GỪNG (HŨ 500G)</div>
+        <div style="font-size: 11px; color: #555;">SKU: OMAI-SAU-GUNG-500G</div>
+      </div>
+
+      <!-- Trường bị KHÓA theo BR-UC-NK-001-07 -->
+      <div style="margin-bottom: 8px;">
+        <label style="font-size: 10px; color: #666;">MÃ LÔ SẢN XUẤT (KHÓA GÕ TAY):</label>
+        <div class="field-lock">
+          <span>LOT-20260802-01</span>
+          <span class="lock-icon">LOCKED</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 8px;">
+        <label style="font-size: 10px; color: #666;">HẠN SỬ DỤNG (EXP DATE — >= 70%):</label>
+        <div class="field-lock">
+          <span>02/08/2027 (Còn 100% HSD)</span>
+          <span class="lock-icon">LOCKED</span>
+        </div>
+      </div>
+
+      <!-- Gợi ý Vị trí Bin FEFO -->
+      <div class="bin-suggestion">
+        <label style="font-size: 10px; font-weight: bold;">VỊ TRÍ KHO GỢI Ý (FEFO/KHO KHÔ):</label>
+        <span class="bin-code">KHO1-DAY-A-KE02-TANG3-O05</span>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 10px; color: #666;">QUÉT XÁC NHẬN MÃ BIN TRÊN KỆ:</label>
+        <input type="text" style="width:100%; padding:6px; font-family:monospace;" value="BIN-K1-A-02-3-05" placeholder="Quét mã dán trên kệ ô...">
+      </div>
+
+      <button class="btn btn-dark" style="width: 100%; padding: 10px;" id="pda-confirm-btn">XÁC NHẬN CẤT Ô NÀY (PUT-AWAY)</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: DESKTOP MANAGEMENT PANEL -->
+  <div class="main-panel">
+    <div class="panel-header">
+      <div>
+        <h2>CHI TIẾT PHIẾU NHẬP KHO: NK-PO-20260802-001</h2>
+        <span style="font-size: 12px; color: #666;">Trạng thái: <strong>PENDING_APPROVAL (Chờ Thủ kho trưởng duyệt)</strong></span>
+      </div>
+      <div>
+        <button class="btn btn-secondary" onclick="window.location.href='SCR-UC-NK-001-01.html'">&larr; Quay lại danh sách</button>
+      </div>
+    </div>
+
+    <!-- Thông tin chung -->
+    <div class="info-grid">
+      <div class="info-item">
+        <label>Loại Nhập Kho</label>
+        <span>NK-PO (Nhập mua NCC)</span>
+      </div>
+      <div class="info-item">
+        <label>Mã PO ERP</label>
+        <span>PO-2026-1002 (FAST ERP)</span>
+      </div>
+      <div class="info-item">
+        <label>Nhà Cung Cấp</label>
+        <span>Công ty Nông Sản Hưng Yên</span>
+      </div>
+      <div class="info-item">
+        <label>Tổng Số Lượng PO</label>
+        <span>1,000 Hũ</span>
+      </div>
+      <div class="info-item">
+        <label>Tổng Thực Nhập Scan</label>
+        <span>1,000 Hũ (Đạt 100%)</span>
+      </div>
+      <div class="info-item">
+        <label>Kiểm Định QC</label>
+        <span class="tag-qc-pass">QC PASSED 100%</span>
+      </div>
+    </div>
+
+    <!-- Danh sách Chi tiết SKU & Bin Put-away -->
+    <h3>Danh sách Chi Tiết Sản Phẩm &amp; Vị Trí Cất Hàng (Bin Location)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Mã SKU / Tên Sản Phẩm</th>
+          <th>Mã Lô (Lot)</th>
+          <th>Hạn Sử Dụng</th>
+          <th>QC Status</th>
+          <th>SL PO</th>
+          <th>SL Cất</th>
+          <th>Vị Trí Bin Location</th>
+          <th>Trạng thái Cất</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>OMAI-SAU-GUNG-500G</strong><br>Ô mai Sấu Xào Gừng 500g</td>
+          <td>LOT-20260802-01</td>
+          <td>02/08/2027 (12 Tháng)</td>
+          <td><span class="tag-qc-pass">PASSED</span></td>
+          <td>500 Hũ</td>
+          <td>500 Hũ</td>
+          <td><code>K1-A-02-T3-O05</code> (Kho Khô)</td>
+          <td><span style="color:green; font-weight:bold;">Đã cất 100%</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>OMAI-MO-CHUA-HUONG-300G</strong><br>Ô mai Mơ Chùa Hương 300g</td>
+          <td>LOT-20260802-02</td>
+          <td>02/02/2027 (6 Tháng)</td>
+          <td><span class="tag-qc-pass">PASSED</span></td>
+          <td>500 Hũ</td>
+          <td>500 Hũ</td>
+          <td><code>K1-B-01-T2-O02</code> (Kho Mát)</td>
+          <td><span style="color:green; font-weight:bold;">Đã cất 100%</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Đối soát 3-Way Matching & Đính kèm -->
+    <div style="background: #f5f5f5; border: 1px solid #ccc; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+      <h4 style="font-size: 13px; font-weight: bold; margin-bottom: 8px;">ĐỐI SOÁT 3-WAY MATCHING &amp; CHỨNG TỪ ĐÍNH KÈM (BR-UC-NK-001-09)</h4>
+      <div style="display: flex; gap: 20px; font-size: 12px;">
+        <div>&check; <strong>PO ERP:</strong> 1,000 hũ (Khớp)</div>
+        <div>&check; <strong>Quét WMS:</strong> 1,000 hũ (Dung sai 0%)</div>
+        <div>&check; <strong>Ảnh BB giao nhận:</strong> <code>bien-ban-giao-nhan-tai-xe.jpg</code> (Đã chụp)</div>
+      </div>
+    </div>
+
+    <!-- Action Bar & Controls -->
+    <div class="action-bar">
+      <div>
+        <button class="btn btn-danger" id="btn-rollback" title="Ngoại lệ E4: Xả hàng khỏi vị trí kệ nếu muốn hủy phiếu">Rollback Xả Kệ (Edge Case E4)</button>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-secondary" id="btn-reject-doc">Từ chối Phiếu</button>
+        <button class="btn btn-success" id="btn-approve-doc">PHÊ DUYỆT PHIẾU NHẬP (APPROVE)</button>
+      </div>
+    </div>
+
+    <div class="spec-box">
+      <strong>Tuân thủ Quy tắc Kiểm soát (BR Compliance):</strong><br>
+      - <strong>BR-UC-NK-001-06 (SoD & Threshold):</strong> Nút "PHÊ DUYỆT PHIẾU NHẬP" chỉ sáng đối với tài khoản <em>Thủ kho trưởng</em> (đơn chuẩn < 100 triệu VNĐ) hoặc <em>Giám đốc Logistics</em> (đơn >= 100 triệu VNĐ hoặc lỗi QC). Tài khoản Thủ kho tạo phiếu bị mờ/khóa 100%.<br>
+      - <strong>BR-UC-NK-001-07:</strong> Mã Lô và EXP Date trên PDA bị khóa gõ tay hoàn toàn để chống gian lận hợp thức hóa hàng cận Date.<br>
+      - <strong>BR-UC-NK-001-08:</strong> Nếu bấm "Rollback Xả Kệ", hệ thống yêu cầu Thủ kho mang PDA đến từng ô Bin quét nhả hàng trước khi phiếu đổi sang CANCELLED.
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

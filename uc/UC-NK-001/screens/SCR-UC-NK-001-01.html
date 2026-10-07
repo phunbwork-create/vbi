@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCR-UC-NK-001-01: Màn hình Danh sách & Tiếp nhận Phiếu Nhập Kho - WMS Ô mai Hồng Lam</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+    body { background-color: #f4f5f7; color: #333; padding: 20px; }
+    .container { max-width: 1200px; margin: 0 auto; background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
+    .header h1 { font-size: 20px; font-weight: 700; color: #111; }
+    .header .user-info { font-size: 13px; color: #555; text-align: right; }
+    .badge-code { background: #e0e0e0; padding: 3px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+    
+    /* Tabs & Filters */
+    .tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 15px; background: #fafafa; border-radius: 4px 4px 0 0; }
+    .tab-item { padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; border: 1px solid transparent; border-bottom: none; }
+    .tab-item.active { background: #fff; border-color: #ccc; border-top: 3px solid #333; margin-bottom: -1px; }
+    
+    .filter-bar { display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 10px; margin-bottom: 20px; background: #f9f9f9; padding: 12px; border: 1px solid #e0e0e0; border-radius: 4px; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #666; margin-bottom: 4px; }
+    .form-control { padding: 8px 10px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; background: #fff; }
+    .btn { padding: 8px 16px; font-size: 13px; font-weight: 600; border: 1px solid #333; background: #333; color: #fff; border-radius: 4px; cursor: pointer; height: 35px; align-self: flex-end; }
+    .btn-secondary { background: #fff; color: #333; border-color: #ccc; }
+    
+    /* Table */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; }
+    th { background-color: #eee; font-weight: 700; color: #222; }
+    tr:hover { background-color: #f5f5f5; }
+    
+    .status-tag { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .status-draft { background: #eee; color: #555; }
+    .status-pending { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+    .status-approved { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .status-qc-pass { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    .status-qc-reject { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    /* Footer & Spec Note */
+    .spec-note { margin-top: 25px; padding: 12px; background: #f0f0f0; border-left: 4px solid #333; font-size: 12px; color: #444; }
+    .spec-note strong { font-weight: 700; color: #000; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>HỆ THỐNG QUẢN LÝ KHO (WMS) — CÔNG TY Ô MAI HỒNG LAM</h1>
+      <span class="badge-code">SCR-UC-NK-001-01</span> <span>Danh sách &amp; Tiếp nhận Phiếu Nhập Kho</span>
+    </div>
+    <div class="user-info">
+      <div>Người dùng: <strong>Lê Minh Đức (Thủ kho trưởng)</strong></div>
+      <div>Kho: <strong>Kho Tổng Hoài Đức — Hà Nội</strong></div>
+    </div>
+  </div>
+
+  <!-- Tabs Phân loại nhập kho -->
+  <div class="tabs">
+    <div class="tab-item active" id="tab-all">Tất cả Phiếu Nhập</div>
+    <div class="tab-item" id="tab-po">NK-PO (Nhập mua NCC)</div>
+    <div class="tab-item" id="tab-tp">NK-TP (Nhập thành phẩm xưởng)</div>
+    <div class="tab-item" id="tab-th">NK-TH (Nhập trả hàng/Thu hồi)</div>
+    <div class="tab-item" id="tab-ck">NK-CK (Nhập chuyển kho)</div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <div class="form-group">
+      <label for="search-key">Tìm kiếm mã phiếu / PO / SKU</label>
+      <input type="text" id="search-key" class="form-control" placeholder="Nhập NK-PO..., PO-1002, sấu xào...">
+    </div>
+    <div class="form-group">
+      <label for="filter-status">Trạng thái Phiếu</label>
+      <select id="filter-status" class="form-control">
+        <option value="">-- Tất cả trạng thái --</option>
+        <option value="DRAFT">Nháp (DRAFT)</option>
+        <option value="PENDING">Chờ duyệt (PENDING_APPROVAL)</option>
+        <option value="APPROVED">Đã duyệt (APPROVED)</option>
+        <option value="CANCELLED">Đã hủy (CANCELLED)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="filter-qc">Trạng thái QC</label>
+      <select id="filter-qc" class="form-control">
+        <option value="">-- Tất cả QC --</option>
+        <option value="PASSED">QC Đạt (PASSED)</option>
+        <option value="REJECTED">QC Lỗi một phần (REJECTED)</option>
+        <option value="HOLD">Biệt trữ / Chờ QC</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="filter-date">Từ ngày - Đến ngày</label>
+      <input type="date" id="filter-date" class="form-control" value="2026-08-02">
+    </div>
+    <div style="display: flex; gap: 5px;">
+      <button class="btn" id="btn-search">Tìm kiếm</button>
+      <button class="btn btn-secondary" id="btn-create">+ Tạo phiếu mới</button>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>Mã Phiếu WMS</th>
+          <th>Loại Nhập</th>
+          <th>Mã PO / Chứng từ ERP</th>
+          <th>Nhà Cung Cấp / Nguồn Hàng</th>
+          <th>Ngày Nhập</th>
+          <th>Trạng thái QC</th>
+          <th>Trạng thái Phiếu</th>
+          <th>Người Tạo / Cất Hàng</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>NK-PO-20260802-001</strong></td>
+          <td><span class="badge-code">NK-PO</span></td>
+          <td>PO-2026-1002</td>
+          <td>Công ty Nông Sản Hưng Yên</td>
+          <td>02/08/2026 09:30</td>
+          <td><span class="status-tag status-qc-pass">QC PASSED (100%)</span></td>
+          <td><span class="status-tag status-pending">PENDING_APPROVAL</span></td>
+          <td>Nguyễn Văn A (Thủ kho)</td>
+          <td><button class="btn btn-secondary" onclick="window.location.href='SCR-UC-NK-001-02.html'">Xem / Duyệt</button></td>
+        </tr>
+        <tr>
+          <td><strong>NK-TP-20260802-002</strong></td>
+          <td><span class="badge-code">NK-TP</span></td>
+          <td>WO-HOAIDUC-884</td>
+          <td>Nhà máy Sản xuất Hoài Đức</td>
+          <td>02/08/2026 08:15</td>
+          <td><span class="status-tag status-qc-pass">QC PASSED</span></td>
+          <td><span class="status-tag status-approved">APPROVED</span></td>
+          <td>Trần Văn B (Thủ kho)</td>
+          <td><button class="btn btn-secondary" onclick="window.location.href='SCR-UC-NK-001-02.html'">Chi tiết</button></td>
+        </tr>
+        <tr>
+          <td><strong>NK-PO-20260802-003</strong></td>
+          <td><span class="badge-code">NK-PO</span></td>
+          <td>PO-2026-1005</td>
+          <td>Cơ sở Bao bì Phú Thọ</td>
+          <td>02/08/2026 07:45</td>
+          <td><span class="status-tag status-qc-reject">QC LỖI 1 PHẦN (10%)</span></td>
+          <td><span class="status-tag status-pending">CHỜ COO DUYỆT</span></td>
+          <td>Nguyễn Văn A (Thủ kho)</td>
+          <td><button class="btn btn-secondary" onclick="window.location.href='SCR-UC-NK-001-02.html'">Xử lý lỗi</button></td>
+        </tr>
+        <tr>
+          <td><strong>NK-TH-20260801-008</strong></td>
+          <td><span class="badge-code">NK-TH</span></td>
+          <td>RET-CH-HANGBAC-04</td>
+          <td>Cửa hàng Ô mai 11 Hàng Bạc</td>
+          <td>01/08/2026 16:20</td>
+          <td><span class="status-tag status-draft">BIỆT TRỮ KHO LỖI</span></td>
+          <td><span class="status-tag status-approved">APPROVED</span></td>
+          <td>Phạm Văn C (Thủ kho)</td>
+          <td><button class="btn btn-secondary" onclick="window.location.href='SCR-UC-NK-001-02.html'">Chi tiết</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Spec Note -->
+  <div class="spec-note">
+    <strong>Ghi chú Thiết kế Low-fi (Wireframe Rule):</strong><br>
+    - Áp dụng BR-UC-NK-001-01 &amp; BR-UC-NK-001-06. Tách 4 loại phiếu rõ ràng.<br>
+    - Hàng có cảnh báo QC Lỗi một phần được highlight màu hồng nhạt và tự động chuyển sang luồng phê duyệt của COO / Giám đốc Logistics.<br>
+    - Nút "Xem / Duyệt" dẫn trực tiếp sang màn hình Chi tiết cất hàng `SCR-UC-NK-001-02.html`.
+  </div>
+</div>
+
+</body>
+</html>

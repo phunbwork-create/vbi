@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "docx": "^9.7.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1"
+  }
+}
