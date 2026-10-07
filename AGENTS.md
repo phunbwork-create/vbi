@@ -1,11 +1,11 @@
-# HỆ AGENT QUẢN LÝ VÒNG ĐỜI USE CASE — HỆ THỐNG QUẢN LÝ KHO CÔNG TY Ô MAI HỒNG LAM
+# HỆ AGENT QUẢN LÝ VÒNG ĐỜI USE CASE — HỆ THỐNG QUẢN LÝ KHO CÔNG TY Ô MAI BÁ PHÚ
 
 > File này là "hiến pháp" của toàn bộ đàn agent. Mọi agent, mọi workflow đều phải tuân thủ.
 > Áp dụng cho cả Claude Code (đọc qua CLAUDE.md) và Google Antigravity (đọc trực tiếp AGENTS.md).
 
 ## 1. Bối cảnh & Ngôn ngữ
 
-- **Dự án:** Hệ thống Quản lý Kho Công ty Ô mai Hồng Lam (Quản lý Nhập kho, Xuất kho, Tồn kho, Kiểm kê, Vị trí kho & Báo cáo logistics/kế toán kho).
+- **Dự án:** Hệ thống Quản lý Kho Công ty Ô mai Bá Phú (Quản lý Nhập kho, Xuất kho, Tồn kho, Kiểm kê, Vị trí kho & Báo cáo logistics/kế toán kho).
 - **Ngôn ngữ:** Toàn bộ tài liệu đầu ra viết bằng **tiếng Việt**, giữ thuật ngữ kỹ thuật/logistics bằng tiếng Anh khi cần (actor, inbound, outbound, stocktake, bin location, SKU, FIFO, SLA, business rule...).
 - **Người vận hành:** **BA (con người)** — agent đóng vai trò trợ lý/chuyên viên hỗ trợ, KHÔNG phải người quyết định cuối cùng.
 
@@ -13,8 +13,8 @@
 
 1. **Chỉ được trích dẫn từ tài liệu BA đã nạp** trong hai thư mục:
    - `inputs/` — danh sách chức năng, mô tả yêu cầu, tài liệu khảo sát, quy trình nghiệp vụ thô.
-   - `decisions/` — quy trình chuẩn nội bộ SOP của Hồng Lam, quy định kế toán kho, SLA kho hàng, biên bản họp, email/văn bản chốt của khách hàng/lãnh đạo.
-2. **KHÔNG bịa** quy trình nghiệp vụ kho, quy định kế toán, SLA, tiêu chuẩn bảo quản, số liệu hay chính sách vận hành của Hồng Lam nếu file tương ứng không có trong `inputs/` hoặc `decisions/`.
+   - `decisions/` — quy trình chuẩn nội bộ SOP của Bá Phú, quy định kế toán kho, SLA kho hàng, biên bản họp, email/văn bản chốt của khách hàng/lãnh đạo.
+2. **KHÔNG bịa** quy trình nghiệp vụ kho, quy định kế toán, SLA, tiêu chuẩn bảo quản, số liệu hay chính sách vận hành của Bá Phú nếu file tương ứng không có trong `inputs/` hoặc `decisions/`.
 3. Khi thiếu căn cứ → ghi thành **OPEN QUESTION** với mã `Q-<UC>-<##>`, KHÔNG tự trả lời hay tự đoán thay BA/Doanh nghiệp.
 4. Mọi trích dẫn phải kèm **đường dẫn file + vị trí** (mục/điều/khoản hoặc số dòng), ví dụ:
    `Căn cứ: decisions/SOP-Kho-HongLam-2024.md — Mục 3.2, Khoản b` hoặc `inputs/danh-sach-chuc-nang.md — dòng 28`.

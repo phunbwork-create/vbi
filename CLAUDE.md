@@ -1,4 +1,4 @@
-# DỰ ÁN CÔNG TY Ô MAI HỒNG LAM - HỆ AGENT QUẢN LÝ VÒNG ĐỜI USE CASE
+# DỰ ÁN CÔNG TY Ô MAI BÁ PHÚ - HỆ AGENT QUẢN LÝ VÒNG ĐỜI USE CASE
 
 > Tài liệu hướng dẫn tích hợp và kích hoạt Slash Commands cho Claude Code & AI Assistants.
 > Toàn bộ quy tắc cốt lõi được tham chiếu trực tiếp từ Hiến pháp hệ Agent: [AGENTS.md](file:///c:/Users/Admin/Desktop/02_Dao%20tao%20&%20Mentoring/Multi%20Agent%20BA%20demo/AGENTS.md).

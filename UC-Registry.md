@@ -1,6 +1,6 @@
 # UC REGISTRY — BẢNG QUẢN LÝ TRẠNG THÁI USE CASE (RTM TỔNG)
 
-> **Dự án:** Hệ thống Quản lý Kho Công ty Ô mai Hồng Lam  
+> **Dự án:** Hệ thống Quản lý Kho Công ty Ô mai Bá Phú  
 > **Nguồn sự thật duy nhất** về trạng thái của từng Use Case (UC) theo quy định tại `AGENTS.md`.
 
 ## 1. Danh sách Phân hệ Kho (`<MOD>`)
